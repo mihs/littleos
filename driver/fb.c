@@ -18,8 +18,10 @@ int fb_write_cell_raw(unsigned int row, unsigned int col, unsigned short data) {
     if (row >= FB_ROWS || col >= FB_COLUMNS) {
         return -EFBOUTRANGE;
     }
-    /* on little-endian arch, the bytes will be switched and the character
-     * will be placed first */
+    /*
+     * little-endian arch, the bytes will be switched and the character
+     * will be placed first
+     */
     *(unsigned short*)(FB_ADDRESS + (row * FB_COLUMNS + col) * FB_CELL_SIZE) = data;
     return 0;
 }
@@ -39,14 +41,14 @@ void fb_move_cursor(unsigned int row, unsigned int col) {
     outb(FB_DATA_PORT,    pos & 0x00FF);
 }
 
-void fb_write(char* buffer, unsigned int len, unsigned int fg, unsigned int bg) {
-    /* TODO use hardware scrolling */
-    for (unsigned int i = 0; i < len; i++) {
+void fb_write_c(char* buffer, unsigned int fg, unsigned int bg) {
+    char* c = buffer;
+    while (*c != '\0') {
         if (fb_col > FB_COLUMNS) {
             fb_col = 0;
             fb_row++;
         }
-        if (buffer[i] == '\n') {
+        if (*c == '\n') {
             fb_col = 0;
             fb_row++;
         }
@@ -58,12 +60,28 @@ void fb_write(char* buffer, unsigned int len, unsigned int fg, unsigned int bg) 
                 }
             }
             fb_row = FB_ROWS - 1;
+            for (int j = 0; j < FB_COLUMNS; j++) {
+                fb_write_cell(fb_row, j, ' ', FB_COLOR_BLACK, FB_COLOR_BLACK);
+            }
         }
-        if (buffer[i] == '\n') {
+        if (*c == '\n') {
+            c++;
             continue;
         }
         fb_move_cursor(fb_row, fb_col);
-        fb_write_cell(fb_row, fb_col, buffer[i], fg, bg);
+        fb_write_cell(fb_row, fb_col, *c, fg, bg);
         fb_col++;
+        c++;
     }
+}
+
+void fb_clear() {
+    fb_write_c("\n", FB_COLOR_BLACK, FB_COLOR_BLACK);
+    for (int i = 0; i < FB_ROWS; i++) {
+        for (int j = 0; j < FB_COLUMNS; j++) {
+            fb_write_c(" ", FB_COLOR_BLACK, FB_COLOR_BLACK);
+        }
+    }
+    fb_row = 0;
+    fb_col = 0;
 }

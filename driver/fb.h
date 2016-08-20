@@ -3,7 +3,7 @@
 #ifndef INCLUDE_FB_H
 #define INCLUDE_FB_H
 
-/* We need io functions for the fb_move_cursor */
+/* We need io functions for fb_move_cursor */
 #include "io.h"
 
 /* Framebuffer colors */
@@ -67,7 +67,7 @@ int fb_write_cell(
 
 int fb_write_cell_raw(unsigned int row, unsigned int col, unsigned short data);
 unsigned short fb_read_cell_raw(unsigned int row, unsigned int col);
-void fb_write(char* buffer, unsigned int len, unsigned int fg, unsigned int bg);
+void fb_write_c(char* buffer, unsigned int fg, unsigned int bg);
 
 /*
  *  Moves the cursor of the framebuffer to the given position
@@ -75,5 +75,7 @@ void fb_write(char* buffer, unsigned int len, unsigned int fg, unsigned int bg);
  *  @param pos The new position of the cursor
  */
 void fb_move_cursor(unsigned int row, unsigned int col);
+
+void fb_clear();
 
 #endif // INCLUDE_FB_H
