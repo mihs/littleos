@@ -1,8 +1,8 @@
-OBJECTS = loader.o driver/fb.o driver/serial.o kmain.o driver/io.o
+OBJECTS = loader.o driver/fb.o driver/serial.o kmain.o memory.o error.o x86.o
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
          -nostartfiles -nodefaultlibs -Wall -Werror -Wextra -c \
-		 -std=c11 -I . -I ./driver
+		 -std=c11 -I . -I ./driver -I /usr/include
 LDFLAGS = -T link.ld -melf_i386
 AS = nasm
 ASFLAGS = -f elf
@@ -35,4 +35,4 @@ run: os.iso
 	$(AS) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf *.o kernel.elf os.iso
+	rm -rf *.o driver/*.o kernel.elf os.iso

@@ -6,4 +6,6 @@
 /* Frame buffer */
 #define EFBOUTRANGE 1
 
+void kerror();
+
 #endif // INCLUDE_ERROR_H
