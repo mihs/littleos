@@ -18,3 +18,7 @@
 *.app
 
 *.elf
+
+build/
+log/*
+!log/.gitkeep 
