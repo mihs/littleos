@@ -2,7 +2,7 @@
 
 This is a work in progress.
 
-It all started with the littleos book http://littleosbook.github.io
+Development inspired by the littleos book http://littleosbook.github.io
 
 The goal is to create a minimal x86 OS that can run a GBA emulator.
 
